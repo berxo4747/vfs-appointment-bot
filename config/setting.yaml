@@ -1,0 +1,44 @@
+vfs:
+  base_url: "https://visa.vfsglobal.com/tur/tr/nld/login"
+  dashboard_url: "https://visa.vfsglobal.com/tur/tr/nld/application-detail"
+  login:
+    email_selector: 'input[name="email"]'
+    otp_selector: 'input[name="otp"]'
+    submit_button: 'button[type="submit"]'
+    otp_timeout: 60  # saniye
+
+  captcha:
+    type: "image"         # "image" veya "recaptcha"
+    solver: "2captcha"    # "manual" da olabilir
+    api_key: "your-2captcha-api-key"
+
+appointment:
+  check_interval: 30  # saniye
+  preferred_dates:
+    - "2025-09-20"
+    - "2025-09-21"
+  preferred_times:
+    - "09:00"
+    - "10:00"
+  location: "Istanbul"
+
+notification:
+  telegram:
+    enabled: true
+    bot_token: "your-telegram-bot-token"
+    chat_id: "your-chat-id"
+
+  email:
+    enabled: true
+    smtp_host: "smtp.gmail.com"
+    smtp_port: 587
+    sender: "your-email@gmail.com"
+    password: "your-email-password"
+    recipient: "recipient-email@gmail.com"
+
+otp:
+  method: "email"
+  email_host: "imap.gmail.com"
+  email_user: "your-email@gmail.com"
+  email_pass: "your-email-password"
+  sender_filter: "noreply@vfsglobal.com"
