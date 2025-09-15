@@ -8,8 +8,8 @@ vfs:
     otp_timeout: 60  # saniye
 
   captcha:
-    type: "image"         # "image" veya "recaptcha"
-    solver: "2captcha"    # "manual" da olabilir
+    type: "cloudflare"         # "image" veya "recaptcha"
+    solver: "native"    # "manual" da olabilir
     api_key: "your-2captcha-api-key"
 
 appointment:
