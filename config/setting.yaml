@@ -5,22 +5,25 @@ vfs:
     email_selector: 'input[name="email"]'
     otp_selector: 'input[name="otp"]'
     submit_button: 'button[type="submit"]'
-    otp_timeout: 60  # saniye
+    otp_timeout: 60
 
   captcha:
-    type: "cloudflare"         # "image" veya "recaptcha"
-    solver: "native"    # "manual" da olabilir
-    api_key: "your-2captcha-api-key"
+    type: "cloudflare"
+    solver: "native"
 
 appointment:
-  check_interval: 30  # saniye
+  check_interval: 30
   preferred_dates:
     - "2025-09-20"
     - "2025-09-21"
   preferred_times:
     - "09:00"
     - "10:00"
-  location: "Istanbul"
+  preferred_locations:
+    - "Netherlands Visa Application Centre - Ankara"
+    - "Netherlands Visa Application Centre - Bursa"
+    - "Netherlands Visa Application Centre - ALTUNIZADE"
+    - "Netherlands Visa Application Centre - BEYOGLU"
 
 notification:
   telegram:
