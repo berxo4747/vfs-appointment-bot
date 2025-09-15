@@ -1,0 +1,51 @@
+# src/main.py
+
+from playwright.sync_api import sync_playwright
+from config_loader import load_settings
+from login import login
+from captcha_solver import solve_image_captcha
+from appointment_checker import check_available_slots
+from reservation import reserve_slot
+from notifier import send_telegram_message, send_email
+
+settings = load_settings()
+
+def run_bot():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+        page = browser.new_page()
+
+        try:
+            # Giriş
+            login(page)
+
+            # CAPTCHA çözümü gerekiyorsa
+            if settings["vfs"]["captcha"]["type"] == "image":
+                captcha_element = page.locator("img.captcha-image")
+                captcha_element.screenshot(path="captcha.png")
+                captcha_text = solve_image_captcha("captcha.png")
+                page.fill('input[name="captcha"]', captcha_text)
+                page.click(settings["vfs"]["login"]["submit_button"])
+                page.wait_for_load_state("networkidle")
+
+            # Randevu slotlarını kontrol et
+            slots = check_available_slots(page)
+
+            if slots:
+                # İlk uygun slot için rezervasyon dene
+                success = reserve_slot(page, slots[0])
+                if success:
+                    send_telegram_message(f"✅ Randevu alındı: {slots[0]}")
+                    send_email("Randevu Onayı", f"Randevunuz başarıyla alındı: {slots[0]}")
+                else:
+                    send_telegram_message("⚠️ Randevu denemesi başarısız.")
+            else:
+                send_telegram_message("🔍 Uygun randevu bulunamadı.")
+        except Exception as e:
+            print(f"[ERROR] Bot çalışırken hata oluştu: {e}")
+            send_telegram_message(f"❌ Bot hatası: {e}")
+        finally:
+            browser.close()
+
+if __name__ == "__main__":
+    run_bot()
